@@ -23,6 +23,10 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+// --- START: DIY Config ---
+import com.github.kr328.clash.service.myfeature.newdiyconfig.DiyConfigController
+// --- END: DIY Config ---
+
 object ProfileProcessor {
     private val profileLock = Mutex()
     private val processLock = Mutex()
@@ -48,7 +52,13 @@ object ProfileProcessor {
                 Clash.setAgeSecretKey(snapshot.ageSecretKey?.takeIf { it.isNotBlank() })
 
                 val force = snapshot.type != Profile.Type.File
-                val subscriptionInfo = fetchProfile(context, snapshot.source, force, callback)
+                // --- START: DIY Config ---
+                // [拦截点 A: 应用/手动保存]
+                // 当用户点击“保存”或“应用”配置时触发。这是配置文件的“第一次洗礼”。
+                // 确保新导入的配置在落地前被注入自定义规则、分流脚本，并将 RuleProvider 指向本地基站。
+                val diySource = DiyConfigController.processProfile(context, snapshot.type, snapshot.source)
+                val subscriptionInfo = fetchProfile(context, diySource, force, callback)
+                // --- END: DIY Config ---
 
                 profileLock.withLock {
                     if (PendingDao().queryByUUID(snapshot.uuid) == snapshot) {
@@ -107,7 +117,13 @@ object ProfileProcessor {
 
                 Clash.setAgeSecretKey(snapshot.ageSecretKey?.takeIf { it.isNotBlank() })
 
-                val subscriptionInfo = fetchProfile(context, snapshot.source, true, callback)
+                // --- START: DIY Config ---
+                // [拦截点 B: 自动/后台更新]
+                // 当配置触发定时自动更新，或用户手动点击“刷新订阅”时触发。这是配置文件的“生命延续”。
+                // 确保更新后的原版配置不会覆盖掉我们的自定义设置，保持分流逻辑在整个生命周期内的一致性。
+                val diySource = DiyConfigController.processProfile(context, snapshot.type, snapshot.source)
+                val subscriptionInfo = fetchProfile(context, diySource, true, callback)
+                // --- END: DIY Config ---
 
                 profileLock.withLock {
                     val imported = ImportedDao().queryByUUID(snapshot.uuid)

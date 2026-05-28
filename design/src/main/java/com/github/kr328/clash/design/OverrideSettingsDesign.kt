@@ -179,6 +179,7 @@ class OverrideSettingsDesign(
                 empty = R.string.default_
             )
 
+            /*
             selectableList(
                 value = configuration::mode,
                 values = arrayOf(
@@ -195,6 +196,7 @@ class OverrideSettingsDesign(
                 ),
                 title = R.string.mode
             )
+            */
 
             selectableList(
                 value = configuration::logLevel,
