@@ -64,3 +64,6 @@ google-services.json
 
 # MacOS
 .DS_Store
+
+# 忽略编译生成的 apk 等 meta 输出文件
+/app/meta/

@@ -12,6 +12,11 @@ import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.service.clash.clashRuntime
 import com.github.kr328.clash.service.clash.module.*
 import com.github.kr328.clash.service.model.AccessControlMode
+
+// --- START: DIY Config ---
+import com.github.kr328.clash.service.myfeature.newdiyconfig.DiyConfigController
+// --- END: DIY Config ---
+
 import com.github.kr328.clash.service.store.ServiceStore
 import com.github.kr328.clash.service.util.cancelAndJoinBlocking
 import com.github.kr328.clash.service.util.parseCIDR
@@ -43,6 +48,11 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
         install(TimeZoneModule(self))
         install(SuspendModule(self))
 
+        // --- START: DIY Config ---
+        // 初始化 DiyConfig (启动本地服务器、注册规则)
+        DiyConfigController.initialize(self)
+        // --- END: DIY Config ---
+
         try {
             tun.open()
 
@@ -73,6 +83,11 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
             reason = e.message
         } finally {
             withContext(NonCancellable) {
+                // --- START: DIY Config ---
+                // 停止 DiyConfig 服务
+                DiyConfigController.destroy()
+                // --- END: DIY Config ---
+
                 tun.close()
 
                 stopSelf()
