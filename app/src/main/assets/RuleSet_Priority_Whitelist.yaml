@@ -51,8 +51,15 @@ payload:
 
   # Kotlin Multiplatform & JetBrains Build Services
   - DOMAIN-SUFFIX,jetbrains.com
+  - DOMAIN-SUFFIX,jetbrains.space       # Compose Multiplatform / Skiko 构件仓库
+  - DOMAIN-SUFFIX,jetbrains.team        # JetBrains 扩展构件仓库
   - DOMAIN-SUFFIX,kotlinlang.org
+  - DOMAIN-SUFFIX,kotl.in               # Kotlin 官方短链重定向
   - DOMAIN-SUFFIX,objects.githubusercontent.com # GitHub Binary Releases CDN (Node/Yarn)
   - DOMAIN-SUFFIX,googlesource.com
   - DOMAIN-SUFFIX,gvt1.com
+  - DOMAIN-SUFFIX,foojay.io             # Gradle Java Toolchain API
+  - DOMAIN-SUFFIX,adoptium.net          # OpenJDK (Temurin) 二进制包下载 CDN
+  - DOMAIN-SUFFIX,cocoapods.org         # iOS CocoaPods 依赖仓库
+  - DOMAIN-SUFFIX,gradle.com            # Gradle Enterprise / Develocity
 
