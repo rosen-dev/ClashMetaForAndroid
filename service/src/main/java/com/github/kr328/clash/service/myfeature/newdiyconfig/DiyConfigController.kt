@@ -64,13 +64,18 @@ object DiyConfigController {
             setupStaticRules(context)
 
             // 3. 下载原始配置
-            val originalYaml = Downloader.download(source).getOrThrow()
+            val downloadResult = Downloader.download(source).getOrThrow()
 
             // 4. 使用排版引擎修改配置
-            val modifiedYaml = ConfigModifier.modify(originalYaml, DiyRuleServer.baseUrl)
+            val modifiedYaml = ConfigModifier.modify(downloadResult.content, DiyRuleServer.baseUrl)
 
-            // 5. 注入主配置到本地服务器
-            DiyRuleServer.register("/config.yaml") { modifiedYaml }
+            // 5. 组装响应头（包含套餐到期时间和剩余流量信息）
+            val responseHeaders = mutableMapOf<String, String>()
+            downloadResult.subscriptionUserInfo?.let { responseHeaders["subscription-userinfo"] = it }
+            downloadResult.profileUpdateInterval?.let { responseHeaders["profile-update-interval"] = it }
+
+            // 6. 注入主配置及响应头到本地服务器
+            DiyRuleServer.register("/config.yaml", responseHeaders) { modifiedYaml }
 
             // 返回本地生成的 URL
             val finalUrl = "${DiyRuleServer.baseUrl}/config.yaml"
