@@ -10,13 +10,17 @@ payload:
   - DOMAIN-SUFFIX,onedrive.live.com
 
   # Developer Services (开发者服务)
+  - DOMAIN-SUFFIX,open-vsx.org         # Open VSX 插件市场 (Antigravity IDE 默认插件源)
+  - DOMAIN-SUFFIX,visualstudio.com     # VS Code Extension Marketplace 插件市场
+  - DOMAIN-SUFFIX,vsassets.io          # VS Code 插件静态资源与 CDN
+  - DOMAIN-SUFFIX,vscode-assets.net    # VS Code 插件二进制包下载 CDN
+  - DOMAIN-SUFFIX,vscode-cdn.net
   - DOMAIN-SUFFIX,npmjs.org
   - DOMAIN-SUFFIX,nodejs.org
   - DOMAIN-SUFFIX,github.com
   - DOMAIN-SUFFIX,githubusercontent.com
   - DOMAIN-SUFFIX,githubassets.com
   - DOMAIN-SUFFIX,ctfassets.net
-  - DOMAIN-SUFFIX,vscode-cdn.net
   - DOMAIN-SUFFIX,gradle.org
   - DOMAIN-SUFFIX,maven.org
   - DOMAIN-SUFFIX,apache.org
@@ -37,3 +41,18 @@ payload:
   - DOMAIN-SUFFIX,android.com        # Android 开发者文档 & Gradle 插件解析
   - DOMAIN-SUFFIX,unpkg.com          # Expo Web 模式部分依赖的 CDN
   - DOMAIN-SUFFIX,jsdelivr.net       # JavaScript 包 CDN（Expo Web 依赖）
+
+  # Certificate Verification (证书 OCSP / CRL 验证)
+  - DOMAIN-SUFFIX,lencr.org
+  - DOMAIN-SUFFIX,identrust.com
+  - DOMAIN-SUFFIX,digicert.com
+  - DOMAIN-SUFFIX,sectigo.com
+  - DOMAIN-SUFFIX,globalsign.com
+
+  # Kotlin Multiplatform & JetBrains Build Services
+  - DOMAIN-SUFFIX,jetbrains.com
+  - DOMAIN-SUFFIX,kotlinlang.org
+  - DOMAIN-SUFFIX,objects.githubusercontent.com # GitHub Binary Releases CDN (Node/Yarn)
+  - DOMAIN-SUFFIX,googlesource.com
+  - DOMAIN-SUFFIX,gvt1.com
+
