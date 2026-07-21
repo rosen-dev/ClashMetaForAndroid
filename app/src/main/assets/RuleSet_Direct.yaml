@@ -126,5 +126,9 @@ payload:
   - DOMAIN-SUFFIX,memfiredb.com
   - DOMAIN-SUFFIX,memfire.com
 
-  # Aliyun Maven Mirror
+  # Aliyun Maven & npm Mirror / 国内开发者服务
   - DOMAIN-SUFFIX,aliyun.com
+  - DOMAIN-SUFFIX,aliyuncdn.com
+  - DOMAIN-SUFFIX,gitee.com
+  - DOMAIN-SUFFIX,gitee.io
+  - DOMAIN-SUFFIX,gitcode.com
