@@ -36,6 +36,13 @@ payload:
   - DOMAIN-SUFFIX,googleapis.com       # 含 safebrowsing.googleapis.com（已覆盖）
   - DOMAIN-SUFFIX,gstatic.com
   - DOMAIN-SUFFIX,dl.google.com        # Google 下载服务（Android SDK、Chrome 等）
+  - DOMAIN-SUFFIX,goog.com             # Google 短域名（如 antigravity-unleash.goog）
+
+  # Google IP Ranges (Google 直连/服务 IP 网段，解决 IP 请求被 Blacklist 误杀)
+  - IP-CIDR,172.217.0.0/16             # 解决日志中被拦截的 172.217.11x.4 等 IP
+  - IP-CIDR,142.250.0.0/15             # Google 最常用的核心 API/服务 IP 网段
+  - IP-CIDR,216.58.192.0/19            # Google 常用服务网段
+  - IP-CIDR,173.194.0.0/16             # Google 常用服务网段
   - DOMAIN-SUFFIX,npmjs.com          # npm CLI 元数据请求（registry 已由 npmjs.org 覆盖）
   - DOMAIN-SUFFIX,cloudfront.net     # AWS CloudFront CDN（Expo 资源、部分 npm 包二进制文件）
   - DOMAIN-SUFFIX,android.com        # Android 开发者文档 & Gradle 插件解析
