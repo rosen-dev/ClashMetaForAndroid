@@ -36,26 +36,19 @@ object DiyConfigController {
     /**
      * 处理配置文件的核心入口。
      *
-     * 职责：作为配置文件的“前置加工厂”，在 Clash Core 真正下载前介入。
-     * 作用：
-     * 1. 拦截远程 URL 并下载原始 YAML。
-     * 2. 调用 ConfigModifier 注入自定义策略组、分流脚本和本地 RuleProvider 钩子。
-     * 3. 将修改后的终极配置注册到本地 DiyRuleServer。
+     * 职责：拦截配置导入/更新，直接在本地生成纯网关配置。
+     * 无论 source 是什么 URL，均忽略外部网络下载，直接在本地秒级就绪。
      *
-     * 为什么在 ProfileProcessor 的 apply 和 update 中都要调用？
-     * - 在 apply 中调用是为了“第一次洗礼”：确保新保存的配置即带自定义功能。
-     * - 在 update 中调用是为了“生命延续”：确保后续自动更新不会抹除我们的自定义注入。
-     *
-     * @return 修改后的本地服务器 URL (或在失败时回退到原始 source)
+     * @return 修改后的本地服务器 URL (http://127.0.0.1:6789/config.yaml)
      */
     suspend fun processProfile(context: Context, type: Profile.Type, source: String): String {
-        // 仅处理远程 URL
-        if (type != Profile.Type.Url || !source.startsWith("http")) {
+        // 仅处理远程 URL 类型的导入与更新
+        if (type != Profile.Type.Url) {
             return source
         }
 
         return try {
-            AppLogger.d("DIY_CONTROLLER: 开始拦截处理 URL: $source")
+            AppLogger.d("DIY_CONTROLLER: 收到配置导入/更新请求 (源: $source)，直接生成本地纯网关配置")
 
             // 1. 确保服务器启动 (如果尚未启动)
             DiyRuleServer.start()
@@ -63,26 +56,18 @@ object DiyConfigController {
             // 2. 确保规则已注册 (如果尚未注册)
             setupStaticRules(context)
 
-            // 3. 下载原始配置
-            val downloadResult = Downloader.download(source).getOrThrow()
+            // 3. 直接生成本地网关配置 (含 8899 端口、Local-Chain-Proxy 与白名单规则)
+            val generatedYaml = ConfigModifier.generate(DiyRuleServer.baseUrl)
 
-            // 4. 使用排版引擎修改配置
-            val modifiedYaml = ConfigModifier.modify(downloadResult.content, DiyRuleServer.baseUrl)
-
-            // 5. 组装响应头（包含套餐到期时间和剩余流量信息）
-            val responseHeaders = mutableMapOf<String, String>()
-            downloadResult.subscriptionUserInfo?.let { responseHeaders["subscription-userinfo"] = it }
-            downloadResult.profileUpdateInterval?.let { responseHeaders["profile-update-interval"] = it }
-
-            // 6. 注入主配置及响应头到本地服务器
-            DiyRuleServer.register("/config.yaml", responseHeaders) { modifiedYaml }
+            // 4. 注入主配置到本地服务器
+            DiyRuleServer.register("/config.yaml") { generatedYaml }
 
             // 返回本地生成的 URL
             val finalUrl = "${DiyRuleServer.baseUrl}/config.yaml"
-            AppLogger.d("DIY_CONTROLLER: 处理成功, 最终 URL: $finalUrl")
+            AppLogger.d("DIY_CONTROLLER: 本地配置就绪, 最终 URL: $finalUrl")
             finalUrl
         } catch (e: Exception) {
-            AppLogger.e("DIY_CONTROLLER: 处理失败，回退到原始 URL", e)
+            AppLogger.e("DIY_CONTROLLER: 生成本地配置失败，回退到原始 URL", e)
             source
         }
     }

@@ -15,6 +15,10 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 
+// --- START: DIY Config ---
+import com.github.kr328.clash.service.myfeature.newdiyconfig.DiyConfigController
+// --- END: DIY Config ---
+
 class ClashService : BaseService() {
     private val self: ClashService
         get() = this
@@ -36,6 +40,11 @@ class ClashService : BaseService() {
         install(AppListCacheModule(self))
         install(TimeZoneModule(self))
         install(SuspendModule(self))
+
+        // --- START: DIY Config ---
+        // 初始化 DiyConfig (启动本地服务器、注册规则)
+        DiyConfigController.initialize(self)
+        // --- END: DIY Config ---
 
         try {
             while (isActive) {
@@ -61,6 +70,11 @@ class ClashService : BaseService() {
             reason = e.message
         } finally {
             withContext(NonCancellable) {
+                // --- START: DIY Config ---
+                // 停止 DiyConfig 服务
+                DiyConfigController.destroy()
+                // --- END: DIY Config ---
+
                 stopSelf()
             }
         }

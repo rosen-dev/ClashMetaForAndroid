@@ -58,7 +58,7 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                                         create(Profile.Type.File, name)
 
                                     is ProfileProvider.Url ->
-                                        create(Profile.Type.Url, name)
+                                        create(Profile.Type.Url, name, "http://127.0.0.1")
 
                                     is ProfileProvider.QR -> {
                                         null

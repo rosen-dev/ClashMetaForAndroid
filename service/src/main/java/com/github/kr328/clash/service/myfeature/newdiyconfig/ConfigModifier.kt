@@ -3,44 +3,63 @@ package com.github.kr328.clash.service.myfeature.newdiyconfig
 import com.github.kr328.clash.service.myfeature.AppLogger
 
 /**
- * 业务配置修改引擎：负责将自定义的策略组和规则缝合进原始配置。
- * 现已重构为“指挥官”角色，具体脏活累活委派给 Filter 和 Engine。
+ * 业务配置生成引擎：负责生成本地纯网关配置（包含基础设置、本地链式代理节点、策略组和规则）。
  */
 object ConfigModifier {
 
+    // 本地链式代理节点名称与目标端口（指向本机运行的专用客户端）
+    const val LOCAL_PROXY_NAME = "Local-Chain-Proxy"
+    const val LOCAL_PROXY_PORT = 7890
+
     /**
-     * 修改 YAML 配置的唯一入口。
+     * 生成完整的本地网关 YAML 配置。
+     * @param baseUrl 本地规则服务器基础地址，例如 http://127.0.0.1:6789
      */
-    fun modify(originalYaml: String, baseUrl: String): String {
-        AppLogger.d("CONFIG_MODIFIER: 开始重组配置")
+    fun generate(baseUrl: String): String {
+        AppLogger.d("CONFIG_MODIFIER: 开始生成本地网关配置")
 
-        // 1. 委派过滤器提取原始节点和基础配置
-        val nodeNames = DiyConfigFilter.extractNodeNames(originalYaml)
-        val baseConfig = DiyConfigFilter.preserveBaseConfig(originalYaml)
+        val sections = LinkedHashMap<String, Any>()
 
-        // 2. 定义并组装我们要注入的内容 (策略组、规则、数据源)
-        val myOwnRulesSections = createMyOwnRules(nodeNames, baseUrl)
+        // 1. 基础网络设置 (监听 8899 并允许局域网 PC 接入)
+        sections["mixed-port"] = 8899
+        sections["allow-lan"] = true
+        sections["bind-address"] = "*"
+        sections["mode"] = "rule"
+        sections["log-level"] = "info"
+        sections["ipv6"] = false
 
-        // 3. 委派排版引擎生成对应的 YAML 片段
-        val myRulesYaml = DiyYamlEngine.dump(myOwnRulesSections)
+        // 2. 本地链式代理节点定义 (SOCKS5 指向 127.0.0.1:7890)
+        val proxies = listOf(
+            mapOf(
+                "name" to LOCAL_PROXY_NAME,
+                "type" to "socks5",
+                "server" to "127.0.0.1",
+                "port" to LOCAL_PROXY_PORT,
+                "skip-cert-verify" to true
+            )
+        )
+        sections["proxies"] = proxies
 
-        // 4. 拼接头部基础设置和我们生成的新段落
-        return "${baseConfig.trimEnd()}\n\n${myRulesYaml}"
+        // 3. 策略组、规则链与数据源
+        val myOwnRulesSections = createMyOwnRules(baseUrl)
+        sections.putAll(myOwnRulesSections)
+
+        // 4. 通过排版引擎生成规范的 YAML
+        return DiyYamlEngine.dump(sections)
     }
 
     /**
-     * 构建自定义的规则部分。
-     * 这里是业务逻辑最集中的地方：定义组、定义规则、定义数据源。
+     * 构建自定义的策略组、规则与数据源部分。
      */
-    private fun createMyOwnRules(nodeNames: List<String>, baseUrl: String): LinkedHashMap<String, Any> {
+    private fun createMyOwnRules(baseUrl: String): LinkedHashMap<String, Any> {
         val whitelistName = "Whitelist"
         val priorityWhitelistName = "Priority-Whitelist"
         val directName = "Direct"
         val blacklistName = "Blacklist"
 
-        // A. 策略组定义
+        // A. 策略组定义 (Whitelist 走 Local-Chain-Proxy)
         val proxyGroups = listOf(
-            mapOf("name" to whitelistName, "type" to "select", "proxies" to nodeNames),
+            mapOf("name" to whitelistName, "type" to "select", "proxies" to listOf(LOCAL_PROXY_NAME)),
             // Priority-Whitelist 联动 Whitelist
             mapOf("name" to priorityWhitelistName, "type" to "select", "proxies" to listOf(whitelistName)),
             mapOf("name" to directName, "type" to "select", "proxies" to listOf("DIRECT")),

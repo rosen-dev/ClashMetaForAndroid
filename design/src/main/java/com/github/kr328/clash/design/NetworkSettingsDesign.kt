@@ -41,6 +41,7 @@ class NetworkSettingsDesign(
         val screen = preferenceScreen(context) {
             val vpnDependencies: MutableList<Preference> = mutableListOf()
 
+            /*
             val vpn = switch(
                 value = uiStore::enableVpn,
                 icon = R.drawable.ic_baseline_vpn_lock,
@@ -53,6 +54,7 @@ class NetworkSettingsDesign(
                     }
                 }
             }
+            */
 
             category(R.string.vpn_service_options)
 
@@ -131,13 +133,13 @@ class NetworkSettingsDesign(
             }
 
             if (running) {
-                vpn.enabled = false
-
                 vpnDependencies.forEach {
                     it.enabled = false
                 }
             } else {
-                vpn.listener?.onChanged()
+                vpnDependencies.forEach {
+                    it.enabled = uiStore.enableVpn
+                }
             }
         }
 
