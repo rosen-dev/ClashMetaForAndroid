@@ -370,4 +370,16 @@
     <string name="shortcut_start_long">Start Clash service</string>
     <string name="shortcut_stop_short">Stop Clash</string>
     <string name="shortcut_stop_long">Stop Clash service</string>
+
+    <string name="gateway_guide">Usage Guide</string>
+    <string name="gateway_guide_subtext">Chain gateway setup</string>
+    <string name="gateway_guide_title">Usage Guide</string>
+    <string name="gateway_guide_client_title">Upstream Client:</string>
+    <string name="gateway_guide_client_lan_label">- Allow LAN: </string>
+    <string name="gateway_guide_client_lan_value">Disabled</string>
+    <string name="gateway_guide_client_port_label">- Mixed Port: </string>
+    <string name="gateway_guide_pc_title">Windows PC:</string>
+    <string name="gateway_guide_pc_ip_label">- Proxy Address: </string>
+    <string name="gateway_guide_pc_port_label">- Proxy Port: </string>
+    <string name="gateway_guide_ip_unknown">Wi-Fi Disconnected</string>
 </resources>

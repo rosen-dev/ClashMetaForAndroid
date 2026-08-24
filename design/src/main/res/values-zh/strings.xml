@@ -280,4 +280,16 @@
     <string name="shortcut_start_long">启动 Clash 服务</string>
     <string name="shortcut_stop_short">停止 Clash</string>
     <string name="shortcut_stop_long">停止 Clash 服务</string>
+
+    <string name="gateway_guide">使用指南</string>
+    <string name="gateway_guide_subtext">局域网链式网关配置</string>
+    <string name="gateway_guide_title">使用指南</string>
+    <string name="gateway_guide_client_title">机场客户端：</string>
+    <string name="gateway_guide_client_lan_label">- 允许来自局域网的连接：</string>
+    <string name="gateway_guide_client_lan_value">已禁用</string>
+    <string name="gateway_guide_client_port_label">- 混合端口：</string>
+    <string name="gateway_guide_pc_title">Windows PC：</string>
+    <string name="gateway_guide_pc_ip_label">- 代理地址：</string>
+    <string name="gateway_guide_pc_port_label">- 代理端口：</string>
+    <string name="gateway_guide_ip_unknown">未连接 Wi-Fi</string>
 </resources>

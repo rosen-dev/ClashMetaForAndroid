@@ -10,6 +10,7 @@ import com.github.kr328.clash.design.databinding.DesignMainBinding
 import com.github.kr328.clash.design.util.layoutInflater
 import com.github.kr328.clash.design.util.resolveThemedColor
 import com.github.kr328.clash.design.util.root
+import com.github.kr328.clash.design.myfeature.helper.GatewayGuideHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -23,6 +24,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         OpenSettings,
         OpenHelp,
         OpenAbout,
+        OpenGuide,
     }
 
     private val binding = DesignMainBinding
@@ -76,6 +78,10 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
                 .setView(binding.root)
                 .show()
         }
+    }
+
+    suspend fun showGuide() {
+        GatewayGuideHelper.showDialog(context)
     }
 
     init {

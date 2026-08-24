@@ -10,6 +10,7 @@ object ConfigModifier {
     // 本地链式代理节点名称与目标端口（指向本机运行的专用客户端）
     const val LOCAL_PROXY_NAME = "Local-Chain-Proxy"
     const val LOCAL_PROXY_PORT = 7890
+    const val GATEWAY_MIXED_PORT = 8899
 
     // 核心策略组常量定义（消除魔法字符串）
     private const val WHITELIST_GROUP = "Whitelist"
@@ -50,7 +51,7 @@ object ConfigModifier {
      */
     private fun createBaseSettings(): LinkedHashMap<String, Any> {
         val base = LinkedHashMap<String, Any>()
-        base["mixed-port"] = 8899
+        base["mixed-port"] = GATEWAY_MIXED_PORT
         base["allow-lan"] = true
         base["bind-address"] = "*"
         base["mode"] = "rule"
