@@ -19,15 +19,10 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.kaidl.runtime)
     implementation(libs.rikkax.multiprocess)
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
-
-    // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
     // 用于解析和生成 YAML
     implementation(libs.snakeyaml)
-// 或更高版本
-// 用于提供本地 HTTP 服务
+
+    // 用于提供本地 HTTP 服务
     implementation(libs.nanohttpd)
 }
 
