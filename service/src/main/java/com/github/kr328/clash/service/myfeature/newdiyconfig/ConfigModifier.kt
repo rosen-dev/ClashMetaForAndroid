@@ -11,6 +11,12 @@ object ConfigModifier {
     const val LOCAL_PROXY_NAME = "Local-Chain-Proxy"
     const val LOCAL_PROXY_PORT = 7890
 
+    // 核心策略组常量定义（消除魔法字符串）
+    private const val WHITELIST_GROUP = "Whitelist"
+    private const val PRIORITY_WHITELIST_GROUP = "Priority-Whitelist"
+    private const val DIRECT_GROUP = "Direct"
+    private const val BLACKLIST_GROUP = "Blacklist"
+
     /**
      * 生成完整的本地网关 YAML 配置。
      * @param baseUrl 本地规则服务器基础地址，例如 http://127.0.0.1:6789
@@ -20,16 +26,22 @@ object ConfigModifier {
 
         val sections = LinkedHashMap<String, Any>()
 
-        // 1. 基础网络设置 (监听 8899 并允许局域网 PC 接入)
+        // 1. 基础网络设置 (监听 8899 并允许局域网 PC 接入，开启 Meta 性能优化)
         sections.putAll(createBaseSettings())
 
         // 2. 本地链式代理节点定义 (SOCKS5 指向 127.0.0.1:7890)
         sections["proxies"] = createProxies()
 
-        // 3. 策略组、规则链与数据源
-        sections.putAll(createMyOwnRules(baseUrl))
+        // 3. 策略组定义
+        sections["proxy-groups"] = createProxyGroups()
 
-        // 4. 通过排版引擎生成规范的 YAML
+        // 4. 规则链定义 (严格按照优先级排序)
+        sections["rules"] = createRules()
+
+        // 5. 规则数据源定义 (全部指向本地 NanoHTTPD 基站)
+        sections["rule-providers"] = createRuleProviders(baseUrl)
+
+        // 6. 通过排版引擎生成规范的 YAML
         return DiyYamlEngine.dump(sections)
     }
 
@@ -65,53 +77,47 @@ object ConfigModifier {
     }
 
     /**
-     * 构建自定义的策略组、规则与数据源部分。
+     * 构建自定义策略组。
      */
-    private fun createMyOwnRules(baseUrl: String): LinkedHashMap<String, Any> {
-        val whitelistName = "Whitelist"
-        val priorityWhitelistName = "Priority-Whitelist"
-        val directName = "Direct"
-        val blacklistName = "Blacklist"
-
-        // A. 策略组定义 (Whitelist 走 Local-Chain-Proxy)
-        val proxyGroups = listOf(
-            mapOf("name" to whitelistName, "type" to "select", "proxies" to listOf(LOCAL_PROXY_NAME)),
-            // Priority-Whitelist 联动 Whitelist
-            mapOf("name" to priorityWhitelistName, "type" to "select", "proxies" to listOf(whitelistName)),
-            mapOf("name" to directName, "type" to "select", "proxies" to listOf("DIRECT")),
-            mapOf("name" to blacklistName, "type" to "select", "proxies" to listOf("REJECT"))
+    private fun createProxyGroups(): List<Map<String, Any>> {
+        return listOf(
+            mapOf("name" to WHITELIST_GROUP, "type" to "select", "proxies" to listOf(LOCAL_PROXY_NAME)),
+            // Priority-Whitelist 联动主白名单出口
+            mapOf("name" to PRIORITY_WHITELIST_GROUP, "type" to "select", "proxies" to listOf(WHITELIST_GROUP)),
+            mapOf("name" to DIRECT_GROUP, "type" to "select", "proxies" to listOf("DIRECT")),
+            mapOf("name" to BLACKLIST_GROUP, "type" to "select", "proxies" to listOf("REJECT"))
         )
+    }
 
-        // B. 规则链定义 (顺序决定优先级)
-        val rules = listOf(
-            // 1. 拦截特定设备的广告或视频请求
+    /**
+     * 构建规则链列表（顺序自上而下匹配）。
+     */
+    private fun createRules(): List<String> {
+        return listOf(
+            // 1. 拦截Windows 电脑192.168.10.50对Googlevideo.com域名的访问
             "AND,((SRC-IP-CIDR,192.168.10.50/32),(DOMAIN-SUFFIX,googlevideo.com)),REJECT",
             // 2. 先匹配高优先级白名单 (黑名单例外)
-            "RULE-SET,$priorityWhitelistName,$priorityWhitelistName",
+            "RULE-SET,$PRIORITY_WHITELIST_GROUP,$PRIORITY_WHITELIST_GROUP",
             // 3. 再匹配黑名单
-            "RULE-SET,$blacklistName,$blacklistName",
+            "RULE-SET,$BLACKLIST_GROUP,$BLACKLIST_GROUP",
             // 4. 匹配常规直连与代理
-            "RULE-SET,$directName,$directName",
-            "RULE-SET,$whitelistName,$whitelistName",
+            "RULE-SET,$DIRECT_GROUP,$DIRECT_GROUP",
+            "RULE-SET,$WHITELIST_GROUP,$WHITELIST_GROUP",
             // 5. 兜底逻辑
-            "MATCH,$blacklistName"
+            "MATCH,$BLACKLIST_GROUP"
         )
+    }
 
-        // C. 规则数据源定义 (全部指向本地基站)
+    /**
+     * 构建规则数据源定义（全部指向本地基站）。
+     */
+    private fun createRuleProviders(baseUrl: String): Map<String, Any> {
         val now = System.currentTimeMillis()
-        val ruleProviders = mapOf(
-            whitelistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist", "interval" to 86400),
-            priorityWhitelistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist", "interval" to 86400),
-            directName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct", "interval" to 86400),
-            blacklistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist", "interval" to 86400)
+        return mapOf(
+            WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist", "interval" to 86400),
+            PRIORITY_WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist", "interval" to 86400),
+            DIRECT_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct", "interval" to 86400),
+            BLACKLIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist", "interval" to 86400)
         )
-
-        // 使用 LinkedHashMap 保证 YAML 中的 Section 顺序：策略组 -> 规则 -> 数据源
-        val sections = LinkedHashMap<String, Any>()
-        sections["proxy-groups"] = proxyGroups
-        sections["rules"] = rules
-        sections["rule-providers"] = ruleProviders
-
-        return sections
     }
 }
