@@ -17,6 +17,8 @@ payload:
   - DOMAIN-SUFFIX,vscode-cdn.net
   - DOMAIN-SUFFIX,npmjs.org
   - DOMAIN-SUFFIX,nodejs.org
+  - DOMAIN-SUFFIX,golang.org           # Go 语言官方与模块代理 (proxy.golang.org / sum.golang.org)
+  - DOMAIN-SUFFIX,go.dev               # Go 语言官网与包索引 (pkg.go.dev)
   - DOMAIN-SUFFIX,github.com
   - DOMAIN-SUFFIX,githubusercontent.com
   - DOMAIN-SUFFIX,githubassets.com
