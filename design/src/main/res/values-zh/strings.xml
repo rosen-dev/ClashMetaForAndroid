@@ -287,6 +287,8 @@
     <string name="gateway_guide_client_title">机场客户端：</string>
     <string name="gateway_guide_client_lan_label">- 允许来自局域网的连接：</string>
     <string name="gateway_guide_client_lan_value">已禁用</string>
+    <string name="gateway_guide_client_bypass_label">- 应用访问控制：</string>
+    <string name="gateway_guide_client_bypass_value">排除本 App</string>
     <string name="gateway_guide_client_port_label">- 混合端口：</string>
     <string name="gateway_guide_pc_title">Windows PC：</string>
     <string name="gateway_guide_pc_ip_label">- 代理地址：</string>

@@ -377,6 +377,8 @@
     <string name="gateway_guide_client_title">Upstream Client:</string>
     <string name="gateway_guide_client_lan_label">- Allow LAN: </string>
     <string name="gateway_guide_client_lan_value">Disabled</string>
+    <string name="gateway_guide_client_bypass_label">- App Access Control: </string>
+    <string name="gateway_guide_client_bypass_value">Exclude this App</string>
     <string name="gateway_guide_client_port_label">- Mixed Port: </string>
     <string name="gateway_guide_pc_title">Windows PC:</string>
     <string name="gateway_guide_pc_ip_label">- Proxy Address: </string>
