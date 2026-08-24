@@ -21,15 +21,39 @@ object ConfigModifier {
         val sections = LinkedHashMap<String, Any>()
 
         // 1. 基础网络设置 (监听 8899 并允许局域网 PC 接入)
-        sections["mixed-port"] = 8899
-        sections["allow-lan"] = true
-        sections["bind-address"] = "*"
-        sections["mode"] = "rule"
-        sections["log-level"] = "info"
-        sections["ipv6"] = false
+        sections.putAll(createBaseSettings())
 
         // 2. 本地链式代理节点定义 (SOCKS5 指向 127.0.0.1:7890)
-        val proxies = listOf(
+        sections["proxies"] = createProxies()
+
+        // 3. 策略组、规则链与数据源
+        sections.putAll(createMyOwnRules(baseUrl))
+
+        // 4. 通过排版引擎生成规范的 YAML
+        return DiyYamlEngine.dump(sections)
+    }
+
+    /**
+     * 构建基础网络设置。
+     */
+    private fun createBaseSettings(): LinkedHashMap<String, Any> {
+        val base = LinkedHashMap<String, Any>()
+        base["mixed-port"] = 8899
+        base["allow-lan"] = true
+        base["bind-address"] = "*"
+        base["mode"] = "rule"
+        base["log-level"] = "info"
+        base["ipv6"] = false
+        base["find-process-mode"] = "off"
+        base["tcp-concurrent"] = true
+        return base
+    }
+
+    /**
+     * 构建本地链式代理节点。
+     */
+    private fun createProxies(): List<Map<String, Any>> {
+        return listOf(
             mapOf(
                 "name" to LOCAL_PROXY_NAME,
                 "type" to "socks5",
@@ -38,14 +62,6 @@ object ConfigModifier {
                 "skip-cert-verify" to true
             )
         )
-        sections["proxies"] = proxies
-
-        // 3. 策略组、规则链与数据源
-        val myOwnRulesSections = createMyOwnRules(baseUrl)
-        sections.putAll(myOwnRulesSections)
-
-        // 4. 通过排版引擎生成规范的 YAML
-        return DiyYamlEngine.dump(sections)
     }
 
     /**
@@ -84,10 +100,10 @@ object ConfigModifier {
         // C. 规则数据源定义 (全部指向本地基站)
         val now = System.currentTimeMillis()
         val ruleProviders = mapOf(
-            whitelistName to mapOf("type" to "http", "behavior" to "classical", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist", "interval" to 86400),
-            priorityWhitelistName to mapOf("type" to "http", "behavior" to "classical", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist", "interval" to 86400),
-            directName to mapOf("type" to "http", "behavior" to "classical", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct", "interval" to 86400),
-            blacklistName to mapOf("type" to "http", "behavior" to "classical", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist", "interval" to 86400)
+            whitelistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist", "interval" to 86400),
+            priorityWhitelistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist", "interval" to 86400),
+            directName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct", "interval" to 86400),
+            blacklistName to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist", "interval" to 86400)
         )
 
         // 使用 LinkedHashMap 保证 YAML 中的 Section 顺序：策略组 -> 规则 -> 数据源
