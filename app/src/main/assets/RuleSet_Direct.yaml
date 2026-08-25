@@ -27,7 +27,7 @@ payload:
   - DOMAIN-SUFFIX,speed.cloudflare.com
   ############ SpeedTest END ############
 
-  # Windows 连通性测试
+  # Windows 连通性测试 (NCSI)
   - DOMAIN-SUFFIX,dns.msftncsi.com
   - DOMAIN-SUFFIX,msftncsi.com
   - DOMAIN-SUFFIX,ipv6.msftncsi.com
@@ -36,69 +36,48 @@ payload:
   - DOMAIN-SUFFIX,digicert.com
   - DOMAIN-KEYWORD,oneocsp.microsoft.com
   - DOMAIN-KEYWORD,crl.microsoft.com
-  # Microsoft & Windows Update (微软 & Windows 更新)
+
+  # Microsoft & Windows Update (微软 & Windows 系统更新直连)
   - DOMAIN-SUFFIX,msn.com
-  - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com
+  - DOMAIN-SUFFIX,arc.msn.com
   - DOMAIN-SUFFIX,windowsupdate.com
   - DOMAIN-SUFFIX,ctldl.windowsupdate.com
   - DOMAIN-SUFFIX,slscr.update.microsoft.com
-  - DOMAIN-SUFFIX,login.live.com
-  - DOMAIN-SUFFIX,login.microsoftonline.com
-  ## OneDrive / Microsoft Account
-  - DOMAIN-SUFFIX,live.com
-  - DOMAIN-SUFFIX,sfx.ms
-  - DOMAIN-SUFFIX,graph.microsoft.com
-  - DOMAIN-SUFFIX,go.microsoft.com
+  - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com
   - DOMAIN-SUFFIX,update.microsoft.com
-  - DOMAIN-SUFFIX,live.net
-  - DOMAIN-SUFFIX,onedrive.com
-  - DOMAIN-SUFFIX,sharepoint.com
-  - DOMAIN-SUFFIX,windows.com 
+  - DOMAIN-SUFFIX,windows.com
   - DOMAIN-SUFFIX,windows.net
-  - DOMAIN-KEYWORD,onedrive
-  - DOMAIN-SUFFIX,account.microsoft.com
-  - DOMAIN-SUFFIX,cloud.microsoft
-  - DOMAIN-SUFFIX,onecdn.static.microsoft
-  - DOMAIN-SUFFIX,svc.ms
-  - DOMAIN-SUFFIX,skype.com
-  - DOMAIN-SUFFIX,microsoft.com
-  ## Office CDN / Content Delivery
-  - DOMAIN-SUFFIX,office.net
-  - DOMAIN-SUFFIX,office.com
-  ## MSN Services
-  - DOMAIN-SUFFIX,arc.msn.com
-  ## Telemetry / Data Collection
-  - DOMAIN-SUFFIX,data.microsoft.com
-  - DOMAIN-SUFFIX,fpt.microsoft.com
-  ## Delivery Optimization / Updates
   - DOMAIN-SUFFIX,mp.microsoft.com
-  ## Personalized Content / User Services
-  - DOMAIN-SUFFIX,microsoftpersonalcontent.com
-  ## Microsoft Defender SmartScreen
-  - DOMAIN-SUFFIX,smartscreen.microsoft.com
-  ## Microsoft Customer Feedback Platform
   - DOMAIN-SUFFIX,cfp.microsoft.com
-  # 办公软件服务
+  - DOMAIN-SUFFIX,smartscreen.microsoft.com
+
+  # Microsoft 官网与技术支持 (直连)
+  - DOMAIN,www.microsoft.com
+  - DOMAIN,microsoft.com
+  - DOMAIN-SUFFIX,support.microsoft.com
+  - DOMAIN-SUFFIX,support.content.office.net
+  - DOMAIN-SUFFIX,appsforoffice.microsoft.com
   - DOMAIN-SUFFIX,officeclient.microsoft.com
-  # 身份验证和CDN服务
-  - DOMAIN-SUFFIX,g.live.com
-  - DOMAIN-SUFFIX,fpt.live.com
+  - DOMAIN-SUFFIX,uhf.microsoft.com
+  - DOMAIN-SUFFIX,go.microsoft.com
+  - DOMAIN-SUFFIX,edge.microsoft.com
+  - DOMAIN-SUFFIX,skype.com
+
+  # 微软国内可用静态资源 & CDN 边缘分发
+  - DOMAIN-SUFFIX,office.net
+  - DOMAIN-SUFFIX,static.microsoft
+  - DOMAIN-SUFFIX,onecdn.static.microsoft
   - DOMAIN-SUFFIX,msftauth.net
   - DOMAIN-SUFFIX,msauth.net
+  - DOMAIN-SUFFIX,sfx.ms
+  - DOMAIN-SUFFIX,svc.ms
+  - DOMAIN-SUFFIX,mem.gfx.ms
   - DOMAIN-SUFFIX,azureedge.net
   - DOMAIN-SUFFIX,azureedge.us
-  - DOMAIN-SUFFIX,footprintdns.com
-
-  # 浏览器和网络服务
-  - DOMAIN-SUFFIX,msedge.net
   - DOMAIN-SUFFIX,azurefd.net
-  # 监控和报告服务
+  - DOMAIN-SUFFIX,msedge.net
+  - DOMAIN-SUFFIX,footprintdns.com
   - DOMAIN-SUFFIX,nelreports.net
-  - DOMAIN-SUFFIX,azure.com
-
-  # Subscription Provider (订阅服务商)
-  - DOMAIN-SUFFIX,dler.cloud
-  - DOMAIN-SUFFIX,dler.pro
 
   # 加入用于屏蔽微信和支付宝中短视频的私人DNS服务
   - DOMAIN-SUFFIX,nextdns.io
@@ -130,5 +109,12 @@ payload:
   - DOMAIN-SUFFIX,aliyun.com
   - DOMAIN-SUFFIX,aliyuncdn.com
   - DOMAIN-SUFFIX,gitee.com
-  - DOMAIN-SUFFIX,gitee.io
   - DOMAIN-SUFFIX,gitcode.com
+
+  # BoardMix (博思白板 & 华为云存储 & 客服)
+  - DOMAIN-SUFFIX,boardmix.cn
+  - DOMAIN-SUFFIX,boardmix.com
+  - DOMAIN-SUFFIX,bosyun.cn
+  - DOMAIN-SUFFIX,bosyun.net
+  - DOMAIN-SUFFIX,obs.cn-east-3.myhuaweicloud.com
+  - DOMAIN-SUFFIX,qiyukf.com

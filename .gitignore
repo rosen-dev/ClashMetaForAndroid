@@ -67,3 +67,6 @@ google-services.json
 
 # 忽略编译生成的 apk 等 meta 输出文件
 /app/meta/
+
+# 忽略本地域名连通性测试工具
+/domainTestTools/
