@@ -33,9 +33,8 @@ payload:
   - DOMAIN-SUFFIX,ipv6.msftncsi.com
   - DOMAIN-SUFFIX,msftconnecttest.com
   - DOMAIN-SUFFIX,ipv6.msftconnecttest.com
-  - DOMAIN-SUFFIX,digicert.com
-  - DOMAIN-KEYWORD,oneocsp.microsoft.com
-  - DOMAIN-KEYWORD,crl.microsoft.com
+  - DOMAIN-SUFFIX,oneocsp.microsoft.com
+  - DOMAIN-SUFFIX,crl.microsoft.com
 
   # Microsoft & Windows Update (微软 & Windows 系统更新直连)
   - DOMAIN-SUFFIX,msn.com
@@ -138,6 +137,7 @@ payload:
   - DOMAIN-SUFFIX,aliyun.com
   - DOMAIN-SUFFIX,aliyuncdn.com
   - DOMAIN-SUFFIX,gitee.com
+  - DOMAIN-SUFFIX,gitee.io
   - DOMAIN-SUFFIX,gitcode.com
 
   # BoardMix (博思白板 & 华为云存储 & 客服)
