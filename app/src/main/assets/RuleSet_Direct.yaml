@@ -79,6 +79,35 @@ payload:
   - DOMAIN-SUFFIX,footprintdns.com
   - DOMAIN-SUFFIX,nelreports.net
 
+  # --- OneDrive & OneNote 大陆极速直连 (45~80ms 超低延迟) ---
+  # OneDrive 数据与文档同步网关
+  - DOMAIN-SUFFIX,docs.live.net
+  - DOMAIN,api.onedrive.com
+  - DOMAIN,storage.live.com
+  - DOMAIN-SUFFIX,1drv.ms
+  - DOMAIN-SUFFIX,1drv.com
+  - DOMAIN-SUFFIX,onedrive.com
+  - DOMAIN-SUFFIX,sharepoint.com
+  - DOMAIN-SUFFIX,microsoftpersonalcontent.com
+  - DOMAIN-SUFFIX,odc.officeapps.live.com
+  - DOMAIN-SUFFIX,mrodevicemgr.officeapps.live.com
+  - DOMAIN-SUFFIX,recent.svc.cloud.microsoft
+  - DOMAIN-SUFFIX,roaming.svc.cloud.microsoft
+  - DOMAIN-SUFFIX,hubblemedia.svc.cloud.microsoft
+  - DOMAIN-SUFFIX,spoprod-a.akamaihd.net
+
+  # OneNote 笔记、画布分区与实时协作 (极速直连)
+  - DOMAIN-SUFFIX,onenote.com
+  - DOMAIN-SUFFIX,onenote.cloud.microsoft
+  - DOMAIN-SUFFIX,onenote.officeapps.live.com
+  - DOMAIN-SUFFIX,psg4-onenote.officeapps.live.com
+  - DOMAIN-SUFFIX,psg1-collabhubrtc.officeapps.live.com
+  - DOMAIN-SUFFIX,usc-collabrtc.officeapps.live.com
+  - DOMAIN-SUFFIX,augloop.office.com
+  - DOMAIN-SUFFIX,augloop.svc.cloud.microsoft
+  - DOMAIN-SUFFIX,onenoteonline.nel.measure.office.net
+  - DOMAIN-SUFFIX,oauth.officeapps.live.com
+
   # 加入用于屏蔽微信和支付宝中短视频的私人DNS服务
   - DOMAIN-SUFFIX,nextdns.io
 
