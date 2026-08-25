@@ -53,6 +53,8 @@ payload:
   # Microsoft 官网与技术支持 (直连)
   - DOMAIN,www.microsoft.com
   - DOMAIN,microsoft.com
+  - DOMAIN-SUFFIX,account.microsoft.com
+  - DOMAIN-SUFFIX,office.microsoft.com
   - DOMAIN-SUFFIX,support.microsoft.com
   - DOMAIN-SUFFIX,support.content.office.net
   - DOMAIN-SUFFIX,appsforoffice.microsoft.com
@@ -115,6 +117,10 @@ payload:
   - DOMAIN-SUFFIX,mi-img.com
   - DOMAIN-SUFFIX,miui.com
   - DOMAIN-SUFFIX,xiaomi.com
+
+  # 商米 (Sunmi)
+  - DOMAIN-SUFFIX,sunmi.com
+
   # Deepseek
   - DOMAIN-KEYWORD,deepseek
   - DOMAIN-SUFFIX,deepseek.com
