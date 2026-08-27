@@ -236,6 +236,12 @@ payload:
   - DOMAIN-SUFFIX,sanity.io
   - DOMAIN-SUFFIX,assets.claude.ai
 
+  # OpenAI & ChatGPT (Epidemic Sound AI 语义搜歌 & ChatGPT 官方生态)
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,chatgpt.com
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+
   # > Google FCM
   # According to Firebase FAQ https://firebase.google.com/docs/cloud-messaging/concept-options#messaging-ports-and-your-firewall
   - DOMAIN,mtalk.google.com
