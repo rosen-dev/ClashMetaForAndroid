@@ -242,6 +242,15 @@ payload:
   - DOMAIN-SUFFIX,oaistatic.com
   - DOMAIN-SUFFIX,oaiusercontent.com
 
+  # Epidemic Sound (免版税音乐与音效库 - 全套高速代理)
+  - DOMAIN-SUFFIX,epidemicsound.com
+  - DOMAIN-SUFFIX,optimizely.com
+  - DOMAIN-SUFFIX,contentful.com
+  - DOMAIN-SUFFIX,recurly.com
+  - DOMAIN-SUFFIX,sentry-cdn.com
+  - DOMAIN-SUFFIX,cookiepro.com
+  - DOMAIN-SUFFIX,gstatic.cn
+
   # > Google FCM
   # According to Firebase FAQ https://firebase.google.com/docs/cloud-messaging/concept-options#messaging-ports-and-your-firewall
   - DOMAIN,mtalk.google.com
