@@ -295,11 +295,6 @@ payload:
   - IP-CIDR,173.194.218.188/32,no-resolve
   - IP-CIDR,209.85.233.188/32,no-resolve
 
-  # Google IP Ranges (Google 直连/服务 IP 网段，在 Blacklist 之后作为常规白名单放行)
-  - IP-CIDR,172.217.0.0/16             # 解决日志中被拦截的 172.217.11x.4 等 IP
-  - IP-CIDR,142.250.0.0/15             # Google 最常用的核心 API/服务 IP 网段
-  - IP-CIDR,216.58.192.0/19            # Google 常用服务网段
-  - IP-CIDR,173.194.0.0/16             # Google 常用服务网段
 
   # --- Third-Party Services ---
   # Figma
@@ -411,3 +406,9 @@ payload:
   - DOMAIN-SUFFIX,graph.microsoft.com
   - DOMAIN-SUFFIX,o15.officeredir.microsoft.com
   - DOMAIN-SUFFIX,config.edge.skype.com
+
+  # Google IP Ranges (Google 核心 IP 网段兜底，放在最末以避免对域名请求触发不必要的 DNS 解析)
+  - IP-CIDR,172.217.0.0/16             # 解决日志中被拦截的 172.217.11x.4 等 IP
+  - IP-CIDR,142.250.0.0/15             # Google 最常用的核心 API/服务 IP 网段
+  - IP-CIDR,216.58.192.0/19            # Google 常用服务网段
+  - IP-CIDR,173.194.0.0/16             # Google 常用服务网段

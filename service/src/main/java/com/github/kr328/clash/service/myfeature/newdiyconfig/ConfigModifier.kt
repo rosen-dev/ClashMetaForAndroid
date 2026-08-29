@@ -59,6 +59,7 @@ object ConfigModifier {
         base["ipv6"] = false
         base["find-process-mode"] = "off"
         base["tcp-concurrent"] = true
+        base["keep-alive-interval"] = 15
         return base
     }
 
@@ -115,10 +116,10 @@ object ConfigModifier {
     private fun createRuleProviders(baseUrl: String): Map<String, Any> {
         val now = System.currentTimeMillis()
         return mapOf(
-            WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist", "interval" to 86400),
-            PRIORITY_WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist", "interval" to 86400),
-            DIRECT_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct", "interval" to 86400),
-            BLACKLIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist", "interval" to 86400)
+            WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Whitelist.yaml", "interval" to 86400),
+            PRIORITY_WHITELIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Priority_Whitelist.yaml?v=$now", "path" to "./rules/RuleSet_Priority_Whitelist.yaml", "interval" to 86400),
+            DIRECT_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Direct.yaml?v=$now", "path" to "./rules/RuleSet_Direct.yaml", "interval" to 86400),
+            BLACKLIST_GROUP to mapOf("type" to "http", "behavior" to "classical", "format" to "yaml", "url" to "$baseUrl/RuleSet_Blacklist.yaml?v=$now", "path" to "./rules/RuleSet_Blacklist.yaml", "interval" to 86400)
         )
     }
 }
